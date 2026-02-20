@@ -310,16 +310,24 @@
             border-radius: var(--border-radius);
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn.primary {
             background-color: var(--primary-color);
             color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .btn.primary:hover {
             background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
         }
 
         .btn.secondary {
@@ -331,6 +339,8 @@
         .btn.secondary:hover {
             border-color: var(--primary-color);
             color: var(--primary-color);
+            transform: translateY(-2px);
+            background: rgba(99, 102, 241, 0.05);
         }
 
         /* Hero Image Styles - Integrated Glass Frame */
@@ -518,15 +528,28 @@
         .project-links {
             display: flex;
             gap: 1rem;
+            margin-top: 0.5rem;
         }
 
-        .project-links a {
+        .project-links a.btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.25rem;
+        }
+
+        .project-links a.btn:hover {
+            text-decoration: none;
+        }
+
+        .project-links a:not(.btn) {
             color: var(--primary-color);
             font-size: 0.9rem;
             font-weight: 500;
         }
 
-        .project-links a:hover {
+        .project-links a:not(.btn):hover {
             text-decoration: underline;
         }
 
@@ -566,6 +589,9 @@
             font-weight: 500;
             color: var(--text-muted);
             transition: var(--transition);
+            word-break: break-word;
+            max-width: 100%;
+            display: block;
         }
 
         .contact-card:hover {
@@ -857,8 +883,8 @@
                                 restore the original image—essentially turning any picture into a sliding puzzle game.
                             </p>
                             <div class="project-links">
-                                <a href="https://santhosh0822.github.io/puzzle--converter/" target="_blank"><i
-                                        class="fas fa-external-link-alt"></i> Demo</a>
+                                <a href="https://santhosh0822.github.io/puzzle--converter/" target="_blank"
+                                    class="btn primary"><i class="fas fa-external-link-alt"></i> Demo</a>
                             </div>
                         </div>
                     </article>
@@ -873,11 +899,11 @@
                 <div class="contact-grid">
                     <a href="mailto:santhoshgovindan2006@gmail.com" class="contact-card email">
                         <i class="fas fa-envelope"></i>
-                        <span>Email Me</span>
+                        <span>santhoshgovindan2006@gmail.com</span>
                     </a>
                     <a href="tel:+917845295779" class="contact-card phone">
                         <i class="fas fa-phone"></i>
-                        <span>Call Me</span>
+                        <span>+91 78452 95779</span>
                     </a>
                     <a href="https://github.com/santhosh0822" target="_blank" class="contact-card github">
                         <i class="fab fa-github"></i>
@@ -1009,6 +1035,26 @@
             document.addEventListener('mousemove', (e) => {
                 document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
                 document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+
+                // Magnetic Button Effect
+                const magneticButtons = document.querySelectorAll('.btn.primary, .btn.secondary');
+                magneticButtons.forEach(btn => {
+                    const rect = btn.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    const distanceX = e.clientX - centerX;
+                    const distanceY = e.clientY - centerY;
+
+                    const magneticDistance = 100; // Activation distance
+                    const power = 0.3; // Magnet strength
+
+                    if (Math.abs(distanceX) < magneticDistance && Math.abs(distanceY) < magneticDistance) {
+                        btn.style.transform = `translate(${distanceX * power}px, ${distanceY * power}px) scale(1.05)`;
+                    } else {
+                        btn.style.transform = '';
+                    }
+                });
             });
         });
     </script>
