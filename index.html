@@ -19,12 +19,15 @@
             --transition: all 0.3s ease;
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --font-main: 'Inter', sans-serif;
+            --mouse-x: 50%;
+            --mouse-y: 50%;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         html {
@@ -33,9 +36,148 @@
 
         body {
             font-family: var(--font-main);
-            background-color: var(--bg-color);
+            background: transparent;
             color: var(--text-color);
             line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cosmic Mood Background */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: #0f172a;
+            overflow: hidden;
+            animation: mood-shift 40s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        @keyframes mood-shift {
+
+            /* Deep Indigo */
+        }
+
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .nebula {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.5;
+            mix-blend-mode: screen;
+            animation: nebula-drift 30s infinite alternate;
+        }
+
+        .nebula-1 {
+            background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+            top: -10%;
+            left: -10%;
+        }
+
+        .nebula-2 {
+            background: radial-gradient(circle, #c084fc 0%, transparent 70%);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        .nebula-3 {
+            background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+            top: 40%;
+            left: 30%;
+            animation-duration: 45s;
+        }
+
+        @keyframes nebula-drift {
+            from {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            to {
+                transform: translate(100px, 100px) scale(1.1) rotate(15deg);
+            }
+        }
+
+        /* Glass Shards - Prism Effect */
+        .glass-shard {
+            position: fixed;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            pointer-events: none;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.1);
+            animation: float-shard 25s infinite linear;
+        }
+
+        .glass-shard::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: prism-sweep 5s infinite linear;
+        }
+
+        @keyframes prism-sweep {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes float-shard {
+            from {
+                transform: translateY(110vh) rotate(0deg);
+            }
+
+            to {
+                transform: translateY(-20vh) rotate(720deg);
+            }
+        }
+
+        .shard-1 {
+            width: 100px;
+            height: 150px;
+            left: 5%;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .shard-2 {
+            width: 120px;
+            height: 120px;
+            left: 85%;
+            animation-delay: -5s;
+            clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+        }
+
+        .shard-3 {
+            width: 80px;
+            height: 200px;
+            left: 45%;
+            animation-delay: -12s;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
         }
 
         a {
@@ -142,6 +284,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
         }
 
         .role {
@@ -190,33 +333,57 @@
             color: var(--primary-color);
         }
 
-        /* Hero Image Styles */
+        /* Hero Image Styles - Integrated Glass Frame */
         .hero-image {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 1000px;
         }
 
         .hero-profile-container {
             position: relative;
             z-index: 10;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
         }
 
         .hero-profile-container::before {
             content: '';
             position: absolute;
-            top: -15px;
-            right: -15px;
-            bottom: -15px;
-            left: -15px;
-            background: linear-gradient(45deg, var(--primary-color), var(--bg-alt));
+            top: -5px;
+            right: -5px;
+            bottom: -5px;
+            left: -5px;
+            background: linear-gradient(45deg, #6366f1, #c084fc, #22d3ee);
             border-radius: 50%;
             z-index: -1;
-            opacity: 0.5;
-            filter: blur(20px);
-            animation: pulse-glow 3s infinite alternate;
-            /* Ensure the glow stays behind the circular image */
+            opacity: 0.6;
+            filter: blur(15px);
+            animation: liquid-pulse 8s infinite alternate;
+        }
+
+        @keyframes liquid-pulse {
+            0% {
+                transform: scale(0.95) rotate(0deg);
+                filter: blur(15px);
+            }
+
+            50% {
+                transform: scale(1.05) rotate(180deg);
+                filter: blur(25px);
+            }
+
+            100% {
+                transform: scale(0.95) rotate(360deg);
+                filter: blur(15px);
+            }
         }
 
         .hero-profile-img {
@@ -226,26 +393,14 @@
             aspect-ratio: 1 / 1;
             object-fit: cover;
             border-radius: 50%;
-            border: 4px solid var(--bg-color);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             transition: var(--transition);
         }
 
-        .hero-profile-img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
-            border-color: var(--primary-color);
-        }
-
-        @keyframes pulse-glow {
-            0% {
-                opacity: 0.3;
-                transform: scale(0.95);
-            }
-
-            100% {
-                opacity: 0.6;
-                transform: scale(1.05);
-            }
+        .hero-profile-container:hover {
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -260,7 +415,7 @@
         }
 
         .alt-bg {
-            background-color: var(--bg-alt);
+            background-color: transparent;
         }
 
         .section-title {
@@ -294,11 +449,12 @@
         }
 
         .skill-card {
-            background-color: var(--bg-color);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
             padding: 1.5rem;
             border-radius: var(--border-radius);
             transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .skill-card:hover {
@@ -325,11 +481,12 @@
         }
 
         .project-card {
-            background-color: var(--card-bg);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
             border-radius: var(--border-radius);
             overflow: hidden;
             transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .project-card:hover {
@@ -373,50 +530,150 @@
             text-decoration: underline;
         }
 
-        /* Contact */
-        .contact-content {
-            display: flex;
-            justify-content: center;
+        /* Contact Section - Logo Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .contact-info {
+        .contact-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            padding: 2.5rem 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
-        }
-
-        .contact-subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-            font-size: 1.125rem;
-        }
-
-        .contact-item {
+            transition: var(--transition);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 2rem;
-            font-size: 1.125rem;
+            gap: 1rem;
         }
 
-        .contact-item i {
+        .contact-card i {
+            font-size: 2.5rem;
+            transition: var(--transition);
+        }
+
+        .contact-card span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--primary-color);
+        }
+
+        /* Brand Specific Low Glows */
+        .contact-card.email:hover {
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .contact-card.phone:hover {
+            box-shadow: 0 15px 30px rgba(34, 211, 238, 0.2);
+        }
+
+        .contact-card.github:hover {
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-card.linkedin:hover {
+            box-shadow: 0 15px 30px rgba(0, 119, 181, 0.3);
+        }
+
+        .contact-card:hover i {
+            transform: scale(1.1);
             color: var(--primary-color);
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
+        .contact-card:hover span {
+            color: var(--text-color);
         }
 
-        .social-links a {
+        .contact-card.github:hover i {
+            color: #fff;
+        }
+
+        .contact-card.linkedin:hover i {
+            color: #0077b5;
+        }
+
+        .contact-card.phone:hover i {
+            color: #22d3ee;
+        }
+
+
+        /* About Box & Reveal Animations */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-box {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            padding: 4rem;
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.05),
+                    transparent);
+            transition: 0.5s;
+        }
+
+        .about-box:hover::before {
+            left: 100%;
+            transition: 0.8s;
+        }
+
+        .about-text h3 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
             font-size: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
             color: var(--text-muted);
         }
 
-        .social-links a:hover {
-            color: var(--primary-color);
-            transform: scale(1.1);
+        .about-text p strong {
+            color: var(--text-color);
+            font-weight: 600;
         }
 
         /* Footer */
@@ -485,6 +742,16 @@
 </head>
 
 <body>
+    <div class="cosmic-bg">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+    </div>
+    <div class="noise-overlay"></div>
+    <div class="mouse-glow"></div>
+    <div class="glass-shard shard-1"></div>
+    <div class="glass-shard shard-2"></div>
+    <div class="glass-shard shard-3"></div>
     <header>
         <nav class="navbar">
             <div class="logo">Santhosh G.</div>
@@ -492,6 +759,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
+                <li><a href="#tools">Tools</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -515,30 +783,40 @@
                 </div>
                 <div class="hero-image">
                     <div class="hero-profile-container">
-                        <img src="profile.jpg" alt="Santhosh G - AI Prompt Engineer"
-                            class="hero-profile-img">
+                        <img src="profile.jpg" alt="Santhosh G - AI Prompt Engineer" class="hero-profile-img">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="about" class="section">
+        <section id="about" class="section reveal-up">
             <div class="container">
                 <h2 class="section-title">About Me</h2>
-                <div class="about-content">
+                <div class="about-box">
                     <div class="about-text">
-                        <p>I specialize in crafting precise and effective prompts to unlock the full potential of Large
-                            Language
-                            Models. My expertise lies in understanding model behavior, optimizing context windows, and
-                            designing structured interactions that yield high-quality, reliable outputs.
+                        <h3>Exploring the Frontiers of AI Communication</h3>
+                        <p>I am an <strong>AI Prompt Engineer</strong> with a passion for exploring the
+                            creative
+                            and technical potential of Large Language Models. I focus on learning the core principles of
+                            <strong>prompt structure</strong>, <strong>context management</strong>, and
+                            <strong>effective
+                                communication</strong> with AI.
                         </p>
-                        <p>Beyond prompt engineering, I explore the intersection of AI and human creativity, constantly
-                            experimenting with new models and techniques to push the boundaries of what's possible in
-                            generative AI.</p>
+
+                        <p>Currently, I am building my foundation in <strong>iterative prompting</strong> and
+                            <strong>instructional design</strong>, aiming to bridge the gap between human curiosity and
+                            machine responses. I love experimenting with different models to understand their unique
+                            behaviors and strengths.
+                        </p>
+
+                        <p>I treat every project as a learning opportunity, refining my skills to create more precise
+                            and
+                            helpful AI interactions.</p>
                     </div>
                 </div>
             </div>
         </section>
+
 
         <section id="skills" class="section alt-bg">
             <div class="container">
@@ -568,38 +846,19 @@
                 <h2 class="section-title">Featured Projects</h2>
                 <div class="projects-grid">
                     <article class="project-card">
-                        <div class="project-image"></div>
-                        <div class="project-info">
-                            <h3>LLM Reasoning Framework</h3>
-                            <p>Designed a chain-of-thought prompting system that improved LLM math and logic reasoning
-                                accuracy by 40%.</p>
-                            <div class="project-links">
-                                <a href="#" target="_blank"><i class="fas fa-file-alt"></i> Case Study</a>
-                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Demo</a>
-                            </div>
+                        <div class="project-image">
+                            <img src="puzzle.jpg" alt="Puzzle Converter Preview"
+                                style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                    </article>
-                    <article class="project-card">
-                        <div class="project-image"></div>
                         <div class="project-info">
-                            <h3>Creative Writing Assistant</h3>
-                            <p>Developed a multi-turn prompt architecture for collaborative storytelling, maintaining
-                                consistent character voice and plot continuity.</p>
+                            <h3>Puzzle Converter</h3>
+                            <p>An Image-to-Puzzle Converter is a program that takes an image, splits it into smaller
+                                pieces arranged in a grid, shuffles them, and lets the user rearrange the pieces to
+                                restore the original image—essentially turning any picture into a sliding puzzle game.
+                            </p>
                             <div class="project-links">
-                                <a href="#" target="_blank"><i class="fas fa-file-alt"></i> Prompts</a>
-                                <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="project-card">
-                        <div class="project-image"></div>
-                        <div class="project-info">
-                            <h3>Enterprise Code Generator</h3>
-                            <p>Engineered comprehensive system prompts for corporate coding standards, reducing code
-                                review time by 25%.</p>
-                            <div class="project-links">
-                                <a href="#" target="_blank"><i class="fab fa-github"></i> Config</a>
-                                <a href="#" target="_blank"><i class="fas fa-file-alt"></i> Docs</a>
+                                <a href="https://santhosh0822.github.io/puzzle--converter/" target="_blank"><i
+                                        class="fas fa-external-link-alt"></i> Demo</a>
                             </div>
                         </div>
                     </article>
@@ -611,19 +870,24 @@
             <div class="container">
                 <h2 class="section-title">Contact Info</h2>
 
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>santhoshgovindan2006@gmail.com</span>
-                        </div>
-                        <div class="social-links">
-                            <a href="https://github.com/santhosh0822" target="_blank"><i class="fab fa-github"></i></a>
-                            <a href="https://www.linkedin.com/in/santhosh-g-895434351" target="_blank"><i
-                                    class="fab fa-linkedin"></i></a>
-
-                        </div>
-                    </div>
+                <div class="contact-grid">
+                    <a href="mailto:santhoshgovindan2006@gmail.com" class="contact-card email">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email Me</span>
+                    </a>
+                    <a href="tel:+917845295779" class="contact-card phone">
+                        <i class="fas fa-phone"></i>
+                        <span>Call Me</span>
+                    </a>
+                    <a href="https://github.com/santhosh0822" target="_blank" class="contact-card github">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/santhosh-g-895434351" target="_blank"
+                        class="contact-card linkedin">
+                        <i class="fab fa-linkedin"></i>
+                        <span>LinkedIn</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -705,6 +969,46 @@
 
             sections.forEach(section => {
                 observer.observe(section);
+            });
+
+            // Hero Image 3D Tilt Interaction
+            const heroContainer = document.querySelector('.hero-profile-container');
+            if (heroContainer) {
+                heroContainer.addEventListener('mousemove', (e) => {
+                    const rect = heroContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+
+                    heroContainer.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                });
+
+                heroContainer.addEventListener('mouseleave', () => {
+                    heroContainer.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+                });
+            }
+
+            // Scroll Reveal Animation (Intersection Observer)
+            const revealElements = document.querySelectorAll('.reveal-up');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // Mouse Glow Tracker
+            document.addEventListener('mousemove', (e) => {
+                document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+                document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
             });
         });
     </script>
